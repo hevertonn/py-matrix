@@ -1,4 +1,4 @@
-# Matrix Script
+# PyMatrix
 
 Script em Python para manipulação de imagens no formato **PBM**, utilizando operações matriciais básicas.
 
