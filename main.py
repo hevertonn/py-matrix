@@ -1,32 +1,3 @@
-r"""
-Autor: Heverton dos Santos Borges
-Data: 04/05/2025
-Descrição: Script para realizar operações em imagens, transformando-as em matrizes e retornando no formato PBM P1.
-Licença: MIT
-
-Versão do Python utilizada: 3.13.3
-
-Como executar:
-    crie um ambiente virtual (opcional):
-        $ python -m venv venv
-
-        ative o ambiente virtual:
-            linux:
-                $ source venv/bin/activate
-            windows (powershell):
-                $ venv\Scripts\Activate.ps1
-
-    instale as dependências:
-        $ pip install numpy pillow
-
-    execute o código:
-        $ python main.py {caminho para a imagem}
-
-* A imagem de entrada deve estar no formato PBM.
-* A saída sera na pasta "./output".
-* O "$" não deve ser incluso nos comandos, seu propósito é apenas para indicar que a linha é um comando.
-"""
-
 import os
 import sys
 
@@ -34,88 +5,88 @@ import numpy as np
 from PIL import Image
 
 
-def pegarCaminhoImagem():
+def get_image_path():
     argv = sys.argv
 
     if len(argv) > 1:
         return argv[1]
 
-    print("O caminho da imagem deve ser informado como parâmetro!")
+    print("The image path must be provided as a parameter!")
     sys.exit()
 
 
-def criarMatriz(caminhoImagem):
-    if not os.path.exists(caminhoImagem):
-        print("Imagem não encontrada!")
+def create_matrix(image_path):
+    if not os.path.exists(image_path):
+        print("Image not found!")
         sys.exit()
 
-    if not caminhoImagem.endswith(".pbm"):
-        print("Formato inválido, a imagem deve estar no formato PBM!")
+    if not image_path.endswith(".pbm"):
+        print("Invalid format; the image must be in PBM format!")
         sys.exit()
 
-    img = Image.open(caminhoImagem)
+    img = Image.open(image_path)
 
     return 1 - np.asarray(img, dtype=np.uint8)
 
 
-def transporMatriz(matriz):
-    matrizT = np.empty((matriz.shape[1], matriz.shape[0]), np.uint8)
+def transpose_matrix(matrix):
+    transposed_matrix = np.empty((matrix.shape[1], matrix.shape[0]), np.uint8)
 
-    for i, linha in enumerate(matriz):
-        for j, e in enumerate(linha):
-            matrizT[j][i] = e
+    for i, row in enumerate(matrix):
+        for j, element in enumerate(row):
+            transposed_matrix[j][i] = element
 
-    return matrizT
-
-
-def inverterOrdemLinhas(matriz):
-    matrizIL = np.empty(matriz.shape, dtype=np.uint8)
-
-    for i, linha in enumerate(matriz):
-        matrizIL[(matriz.shape[0] - 1) - i] = linha
-
-    return matrizIL
+    return transposed_matrix
 
 
-def inverterOrdemColunas(matriz):
-    matrizIC = np.empty(matriz.shape, dtype=np.uint8)
+def reverse_row_order(matrix):
+    reversed_rows_matrix = np.empty(matrix.shape, dtype=np.uint8)
 
-    for i, linha in enumerate(matriz):
-        for j, e in enumerate(linha):
-            matrizIC[i][(matriz.shape[1] - 1) - j] = e
+    for i, row in enumerate(matrix):
+        reversed_rows_matrix[(matrix.shape[0] - 1) - i] = row
 
-    return matrizIC
-
-
-def inverterOrdemLinhasEColunas(matriz):
-    return inverterOrdemColunas(inverterOrdemLinhas(matriz))
+    return reversed_rows_matrix
 
 
-def salvarImagem(matriz, caminhoImagem):
+def reverse_column_order(matrix):
+    reversed_columns_matrix = np.empty(matrix.shape, dtype=np.uint8)
+
+    for i, row in enumerate(matrix):
+        for j, element in enumerate(row):
+            reversed_columns_matrix[i][(matrix.shape[1] - 1) - j] = element
+
+    return reversed_columns_matrix
+
+
+def reverse_row_and_column_order(matrix):
+    return reverse_column_order(reverse_row_order(matrix))
+
+
+def save_image(matrix, image_path):
     if not os.path.exists("output"):
         os.mkdir("output")
 
-    matriz = matriz.astype(str)
-    arquivoImg = open(f"output/{caminhoImagem}", "w")
+    matrix = matrix.astype(str)
+    image_file = open(f"output/{image_path}", "w")
 
-    arquivoImg.write(f"P1\n{matriz.shape[1]} {matriz.shape[0]}\n")
-    for linha in matriz:
-        arquivoImg.write("".join(linha) + "\n")
+    image_file.write(f"P1\n{matrix.shape[1]} {matrix.shape[0]}\n")
+    for row in matrix:
+        image_file.write("".join(row) + "\n")
 
 
-caminhoImg = pegarCaminhoImagem()
-matrizImg = criarMatriz(caminhoImg)
-print("Matriz criada!")
+image_path = get_image_path()
+image_matrix = create_matrix(image_path)
+print("Matrix created!")
 
-matrizImgT = transporMatriz(matrizImg)
+transposed_image_matrix = transpose_matrix(image_matrix)
 
-salvarImagem(inverterOrdemLinhas(matrizImgT), "img_1.pbm")
-salvarImagem(inverterOrdemColunas(matrizImgT), "img_2.pbm")
-salvarImagem(inverterOrdemLinhas(matrizImg), "img_3.pbm")
-salvarImagem(inverterOrdemLinhasEColunas(matrizImg), "img_4.pbm")
-salvarImagem(inverterOrdemColunas(matrizImg), "img_5.pbm")
-salvarImagem(matrizImgT, "img_6.pbm")
-salvarImagem(matrizImg, "img_7.pbm")
-salvarImagem(inverterOrdemLinhasEColunas(matrizImgT), "img_8.pbm")
+save_image(reverse_row_order(transposed_image_matrix), "img_1.pbm")
+save_image(reverse_column_order(transposed_image_matrix), "img_2.pbm")
+save_image(reverse_row_order(image_matrix), "img_3.pbm")
+save_image(reverse_row_and_column_order(image_matrix), "img_4.pbm")
+save_image(reverse_column_order(image_matrix), "img_5.pbm")
+save_image(transposed_image_matrix, "img_6.pbm")
+save_image(image_matrix, "img_7.pbm")
+save_image(reverse_row_and_column_order(transposed_image_matrix), "img_8.pbm")
 
-print("Imagens salvas na pasta output!")
+print("Images saved in the output folder!")

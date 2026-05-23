@@ -1,46 +1,46 @@
 # PyMatrix
 
-Script em Python para manipulação de imagens no formato **PBM**, utilizando operações matriciais básicas.
+Python script for manipulating images in **PBM** format using basic matrix operations.
 
-> Projeto desenvolvido como parte da disciplina de **Geometria Analítica e Cálculo Vetorial** no curso de **Ciência da Computação - UESB**.
-
----
-
-## Objetivo
-
-A partir de uma imagem em formato **PBM**, esse script aplica transformações que reorganizam a posição dos pixels por meio das seguintes operações matriciais:
-
-- **Transposição**
-- **Permutação de linhas**
-- **Permutação de colunas**
-
-Também são utilizadas combinações dessas operações.
-
-Após a execução, serão criadas **8 imagens distintas** na pasta `output/`, localizada no mesmo diretório do script.
+> Project developed as part of the **Analytic Geometry and Vector Calculus** course in the **Computer Science - UESB** program.
 
 ---
 
-## Como executar
+## Objective
 
-> Requisitos: Python 3.9+ e `pip`
+From an image in **PBM** format, this script applies transformations that reorganize pixel positions through the following matrix operations:
 
-1. **Clone o repositório:**
+- **Transposition**
+- **Row permutation**
+- **Column permutation**
+
+Combinations of these operations are also used.
+
+After execution, **8 distinct images** will be created in the `output/` folder, located in the same directory as the script.
+
+---
+
+## How to Run
+
+> Requirements: Python 3.9+ and `pip`
+
+1. **Clone the repository:**
 ``` bash
 git clone https://github.com/hevertonn/matrix-script.git
 cd matrix-script
 ```
 
-2. **Instale as dependências:**
+2. **Install the dependencies:**
 ``` bash
 pip install -r requirements.txt
 ```
 
-3. **Execute o script:**
+3. **Run the script:**
 ``` bash
-python main.py caminho/para/sua/imagem.pbm
+python main.py path/to/your/image.pbm
 ```
 
 ---
 
-## Licença
-Este projeto está licenciado sob Licença MIT. Para mais informações, consulte o arquivo [LICENSE](LICENSE).
+## License
+This project is licensed under the MIT License. For more information, see the [LICENSE](LICENSE) file.
